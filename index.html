@@ -82,8 +82,8 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:8000;o
 /* ── SCROLL-EXPANSION HERO (ScrollExpandMedia) ── */
 .sx-outer{position:relative;height:300vh;background:var(--ink);}
 .sx-sticky{position:sticky;top:0;height:100vh;overflow:hidden;display:flex;align-items:center;justify-content:center;}
-.sx-bg{position:absolute;inset:0;z-index:0;background:url('https://images.unsplash.com/photo-1461896836934-ffe607ba8211?q=80&w=1920&auto=format&fit=crop') center/cover no-repeat;}
-.sx-bg::after{content:'';position:absolute;inset:0;background:rgba(15,10,0,.5);}
+.sx-bg{position:absolute;inset:0;z-index:0;background:url('/bbccbball.png') center/cover no-repeat;}
+.sx-bg::after{content:'';position:absolute;inset:0;background:rgba(15,10,0,.35);}
 .sx-media{
   position:absolute;top:50%;left:50%;
   transform:translate(-50%,-50%);
@@ -92,7 +92,7 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:8000;o
   box-shadow:0 0 80px rgba(0,0,0,.6);z-index:2;
 }
 .sx-media video{width:100%;height:100%;object-fit:cover;display:block;}
-.sx-veil{position:absolute;inset:0;background:rgba(0,0,0,.35);z-index:3;}
+.sx-veil{position:absolute;inset:0;background:rgba(0,0,0,0);z-index:3;}
 .sx-titles{
   position:absolute;top:50%;left:50%;
   transform:translate(-50%,-50%);
@@ -164,7 +164,7 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:8000;o
 /* BG image fade in */
 .ah-bgimg{
   position:absolute;inset:0;z-index:0;
-  background:url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=1920&auto=format&fit=crop') center/cover no-repeat;
+  background:url('/bbccbball.png') center/cover no-repeat;
   opacity:0;
   animation:ahBgFade 1.2s ease 1.5s forwards;
 }
@@ -277,7 +277,7 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:8000;o
 }
 .sx-bg{
   position:absolute;inset:0;
-  background:url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=1920&auto=format&fit=crop') center/cover no-repeat;
+  background:url('/bbccbball.png') center/cover no-repeat;
   transition:opacity .1s;
   z-index:0;
 }
@@ -775,10 +775,7 @@ footer{background:var(--ink);border-top:1px solid rgba(255,255,255,.06);padding:
   <div class="sx-sticky" id="sxSticky">
     <div class="sx-bg" id="sxBg"></div>
     <div class="sx-media" id="sxMedia">
-      <video autoplay muted loop playsinline preload="auto"
-        src="https://me7aitdbxq.ufs.sh/f/2wsMIGDMQRdYuZ5R8ahEEZ4aQK56LizRdfBSqeDMsmUIrJN1"
-        poster="https://images.pexels.com/videos/5752729/space-earth-universe-cosmos-5752729.jpeg">
-      </video>
+      <img src="/bbcc.png" alt="BBCC" style="width:100%;height:100%;object-fit:cover;display:block;">
       <div class="sx-veil" id="sxVeil"></div>
     </div>
     <div class="sx-titles">
@@ -1070,6 +1067,31 @@ footer{background:var(--ink);border-top:1px solid rgba(255,255,255,.06);padding:
 <!-- ══ ABOUT ══ -->
 <section class="sec about-sec" id="about">
   <div class="sec-inner">
+    <!-- Social proof strip -->
+    <div class="reveal" style="margin-bottom:4rem;">
+      <div style="background:var(--ink);border-radius:12px;padding:2.5rem;display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:2rem;text-align:center;">
+        <div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:3rem;color:var(--sun);line-height:1;letter-spacing:.05em;">700+</div>
+          <div style="font-size:.68rem;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-top:4px;">BBCC Homes</div>
+        </div>
+        <div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:3rem;color:var(--sun);line-height:1;letter-spacing:.05em;">7</div>
+          <div style="font-size:.68rem;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-top:4px;">Years in BBCC</div>
+        </div>
+        <div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:3rem;color:var(--sun);line-height:1;letter-spacing:.05em;">13</div>
+          <div style="font-size:.68rem;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-top:4px;">Years Coaching Varsity</div>
+        </div>
+        <div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:3rem;color:var(--sun);line-height:1;letter-spacing:.05em;">4</div>
+          <div style="font-size:.68rem;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-top:4px;">Services This Summer</div>
+        </div>
+        <div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:3rem;color:var(--sun);line-height:1;letter-spacing:.05em;">M.S.</div>
+          <div style="font-size:.68rem;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-top:4px;">Degree in Technology</div>
+        </div>
+      </div>
+    </div>
     <div class="about-grid">
       <div class="reveal">
         <div class="lbl">About</div>
@@ -1198,8 +1220,8 @@ footer{background:var(--ink);border-top:1px solid rgba(255,255,255,.06);padding:
 </section>
 
 <footer>
-  <div class="footer-name">[Your Name] <em>· BBCC Summer Services 2026</em></div>
-  <div class="footer-copy">Lower Merion · Your neighbor, your resource</div>
+  <div class="footer-name">[Your Name] <em>· BBCC's Best Kept Secret</em></div>
+  <div class="footer-copy">Lower Merion · Phys Ed, Health & Leadership · Summer 2026</div>
 </footer>
 
 <script>
