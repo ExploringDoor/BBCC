@@ -1,0 +1,1336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BBCC's Best Kept Secret</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;0,9..144,900;1,9..144,300;1,9..144,700&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --ink:#0f0a00;
+  --paper:#f7f2e8;
+  --paper2:#ede7d6;
+  --paper3:#e4dcc8;
+  --sun:#f5a500;
+  --sun-deep:#d4880a;
+  --sky:#1455a4;
+  --sky-dark:#0d3d7a;
+  --grass:#1a6e2e;
+  --punch:#e03d1e;
+  --white:#fff;
+  --muted:#7a6e58;
+  --muted2:#9a8e78;
+}
+html{scroll-behavior:smooth;}
+body{background:var(--paper);color:var(--ink);font-family:'Instrument Sans',sans-serif;overflow-x:hidden;cursor:none;}
+
+/* CURSOR */
+.cur{position:fixed;width:12px;height:12px;background:var(--sun);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);mix-blend-mode:multiply;transition:width .2s,height .2s;}
+.cur-ring{position:fixed;width:36px;height:36px;border:1.5px solid var(--ink);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .25s,height .25s,border-color .2s;}
+body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:8000;opacity:.022;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:160px;}
+
+/* ── FLOATING NAV (HeroHeader style) ── */
+.hh-header{position:fixed;top:0;left:0;right:0;z-index:5000;padding:0 .5rem;}
+.hh-inner{
+  max-width:900px;margin:.75rem auto 0;
+  padding:.75rem 1.5rem;
+  display:flex;align-items:center;justify-content:space-between;gap:1.5rem;
+  border-radius:100px;
+  background:rgba(15,10,0,.7);
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  border:1px solid rgba(255,255,255,.08);
+  transition:all .35s cubic-bezier(.4,0,.2,1);
+}
+.hh-inner.scrolled{
+  border-radius:16px;
+  background:rgba(15,10,0,.92);
+  border-color:rgba(245,165,0,.2);
+  box-shadow:0 8px 32px rgba(0,0,0,.4);
+  max-width:700px;
+}
+.hh-logo{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:.08em;color:var(--white);text-decoration:none;white-space:nowrap;}
+.hh-logo em{color:var(--sun);font-style:normal;}
+.hh-links{display:flex;align-items:center;gap:.25rem;}
+.hh-link{font-size:.7rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:rgba(255,255,255,.6);text-decoration:none;padding:6px 12px;border-radius:100px;transition:background .2s,color .2s;white-space:nowrap;}
+.hh-link:hover{background:rgba(255,255,255,.08);color:var(--white);}
+.hh-link.active{color:var(--white);}
+.hh-cta{font-size:.7rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--ink);background:var(--sun);padding:8px 18px;border-radius:100px;text-decoration:none;border:none;cursor:pointer;transition:background .2s,transform .15s;white-space:nowrap;}
+.hh-cta:hover{background:var(--sun-deep);transform:translateY(-1px);}
+/* Mobile */
+.hh-hamburger{display:none;flex-direction:column;gap:4px;background:none;border:none;cursor:pointer;padding:4px;}
+.hh-hamburger span{display:block;width:20px;height:1.5px;background:var(--white);border-radius:2px;transition:transform .25s,opacity .25s;}
+.hh-drawer{
+  display:none;position:fixed;top:0;left:0;right:0;bottom:0;
+  background:rgba(15,10,0,.97);
+  z-index:4999;
+  flex-direction:column;align-items:center;justify-content:center;gap:1rem;
+  padding:2rem;
+}
+.hh-drawer.open{display:flex;}
+.hh-drawer .hh-link{font-size:1.1rem;padding:14px 24px;width:100%;text-align:center;border:1px solid rgba(255,255,255,.08);border-radius:12px;}
+.hh-drawer .hh-cta{font-size:1rem;padding:14px 32px;width:100%;text-align:center;border-radius:12px;}
+.hh-close{position:absolute;top:1.5rem;right:1.5rem;background:none;border:none;cursor:pointer;color:var(--white);font-size:1.5rem;opacity:.6;}
+.hh-close:hover{opacity:1;}
+@media(max-width:640px){
+  .hh-links{display:none;}
+  .hh-hamburger{display:flex;}
+}
+
+/* ── SCROLL-EXPANSION HERO (ScrollExpandMedia) ── */
+.sx-outer{position:relative;height:300vh;background:var(--ink);}
+.sx-sticky{position:sticky;top:0;height:100vh;overflow:hidden;display:flex;align-items:center;justify-content:center;}
+.sx-bg{position:absolute;inset:0;z-index:0;background:url('https://images.unsplash.com/photo-1461896836934-ffe607ba8211?q=80&w=1920&auto=format&fit=crop') center/cover no-repeat;}
+.sx-bg::after{content:'';position:absolute;inset:0;background:rgba(15,10,0,.5);}
+.sx-media{
+  position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  width:300px;height:400px;
+  border-radius:16px;overflow:hidden;
+  box-shadow:0 0 80px rgba(0,0,0,.6);z-index:2;
+}
+.sx-media video{width:100%;height:100%;object-fit:cover;display:block;}
+.sx-veil{position:absolute;inset:0;background:rgba(0,0,0,.35);z-index:3;}
+.sx-titles{
+  position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  z-index:4;text-align:center;width:100%;pointer-events:none;
+  display:flex;flex-direction:column;align-items:center;gap:.25rem;
+}
+.sx-t1,.sx-t2{
+  font-family:'Fraunces',serif;
+  font-size:clamp(3rem,7.5vw,6.5rem);
+  font-weight:900;line-height:.92;display:block;
+}
+.sx-t1{color:var(--white);}
+.sx-t2{color:transparent;-webkit-text-stroke:2px var(--sun);font-style:italic;}
+.sx-scroll-hint{
+  position:absolute;bottom:2.5rem;left:50%;transform:translateX(-50%);
+  z-index:5;display:flex;flex-direction:column;align-items:center;gap:8px;
+  font-size:.68rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;
+  color:rgba(255,255,255,.5);animation:sxPulse 2s ease-in-out infinite;
+}
+.sx-scroll-hint-bar{width:1px;height:32px;background:linear-gradient(to bottom,rgba(245,165,0,.8),transparent);}
+@keyframes sxPulse{0%,100%{transform:translateX(-50%) translateY(0);}50%{transform:translateX(-50%) translateY(7px);}}
+.sx-pbar{position:absolute;bottom:0;left:0;height:3px;background:var(--sun);z-index:6;width:0;}
+.sx-endcontent{
+  position:absolute;bottom:0;left:0;right:0;
+  padding:2.5rem;z-index:5;
+  display:flex;justify-content:space-between;align-items:flex-end;
+  flex-wrap:wrap;gap:1rem;
+  opacity:0;transition:opacity .5s;
+}
+.sx-endcontent.vis{opacity:1;}
+.sx-info{display:flex;flex-direction:column;gap:.5rem;}
+.sx-info-line{display:flex;align-items:center;gap:8px;font-size:.78rem;color:rgba(255,255,255,.55);}
+.sx-info-dot{width:5px;height:5px;border-radius:50%;background:var(--sun);flex-shrink:0;}
+.sx-info-line strong{color:rgba(255,255,255,.85);font-weight:600;}
+.sx-btns{display:flex;gap:.75rem;flex-wrap:wrap;}
+
+/* ── ANIMATED HERO (HeroSection style) ── */
+.ah-hero{
+  position:relative;
+  min-height:100vh;
+  background:var(--ink);
+  overflow:hidden;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:7rem 2rem 4rem;
+}
+/* Radial gradient beams */
+.ah-beam{
+  position:absolute;inset:0;pointer-events:none;overflow:hidden;
+  opacity:.5;
+}
+.ah-beam::before{
+  content:'';
+  position:absolute;
+  top:0;left:0;
+  width:42rem;height:90rem;
+  transform:translateY(-350px) rotate(-45deg);
+  border-radius:9999px;
+  background:radial-gradient(68% 69% at 55% 31%, rgba(245,165,0,.06) 0%, rgba(245,165,0,.015) 50%, transparent 80%);
+}
+.ah-beam::after{
+  content:'';
+  position:absolute;
+  top:0;right:0;
+  width:42rem;height:90rem;
+  transform:translateY(-350px) rotate(45deg);
+  border-radius:9999px;
+  background:radial-gradient(68% 69% at 45% 31%, rgba(20,85,164,.08) 0%, rgba(20,85,164,.02) 50%, transparent 80%);
+}
+/* BG image fade in */
+.ah-bgimg{
+  position:absolute;inset:0;z-index:0;
+  background:url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=1920&auto=format&fit=crop') center/cover no-repeat;
+  opacity:0;
+  animation:ahBgFade 1.2s ease 1.5s forwards;
+}
+.ah-bgimg::after{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(125% 125% at 50% 100%, transparent 0%, var(--ink) 70%);
+}
+@keyframes ahBgFade{to{opacity:.35;}}
+/* Badge pill */
+.ah-badge{
+  display:inline-flex;align-items:center;gap:.75rem;
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:100px;
+  padding:.4rem .4rem .4rem 1rem;
+  margin-bottom:2rem;
+  font-size:.78rem;color:rgba(255,255,255,.7);
+  cursor:default;
+  position:relative;z-index:2;
+  opacity:0;
+  animation:ahRise 1s cubic-bezier(.34,1.56,.64,1) .3s forwards;
+}
+.ah-badge-arrow{
+  width:26px;height:26px;border-radius:50%;
+  background:rgba(255,255,255,.08);
+  display:flex;align-items:center;justify-content:center;
+  font-size:.7rem;transition:background .2s;overflow:hidden;
+}
+.ah-badge:hover .ah-badge-arrow{background:rgba(255,255,255,.15);}
+/* Main heading */
+.ah-h1{
+  font-family:'Fraunces',serif;
+  font-size:clamp(3.5rem,8vw,7.5rem);
+  font-weight:900;
+  color:var(--white);
+  text-align:center;
+  line-height:.95;
+  max-width:900px;
+  position:relative;z-index:2;
+  opacity:0;
+  animation:ahBlurIn 1.2s cubic-bezier(.34,1.2,.64,1) .5s forwards;
+}
+.ah-h1 em{color:transparent;-webkit-text-stroke:2px var(--sun);font-style:italic;}
+/* Sub */
+.ah-sub{
+  font-size:clamp(.95rem,1.5vw,1.15rem);
+  font-weight:300;
+  color:rgba(255,255,255,.55);
+  text-align:center;
+  max-width:520px;
+  line-height:1.8;
+  margin-top:1.5rem;
+  position:relative;z-index:2;
+  opacity:0;
+  animation:ahBlurIn 1.2s ease .75s forwards;
+}
+.ah-sub strong{color:rgba(255,255,255,.85);font-weight:600;}
+/* CTA buttons */
+.ah-btns{
+  display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;
+  margin-top:2rem;
+  position:relative;z-index:2;
+  opacity:0;
+  animation:ahRise 1s ease 1s forwards;
+}
+/* App screenshot mockup */
+.ah-mock{
+  position:relative;z-index:2;
+  width:100%;max-width:860px;
+  margin-top:4rem;
+  border-radius:16px;
+  overflow:hidden;
+  border:1px solid rgba(255,255,255,.08);
+  box-shadow:0 40px 120px rgba(0,0,0,.6);
+  opacity:0;
+  animation:ahRise 1.2s ease 1.2s forwards;
+}
+.ah-mock-fade{
+  position:absolute;bottom:0;left:0;right:0;
+  height:60%;
+  background:linear-gradient(to bottom, transparent, var(--ink));
+  z-index:3;
+  pointer-events:none;
+}
+.ah-mock img{width:100%;display:block;border-radius:16px;}
+/* Credential strip */
+.ah-creds{
+  display:flex;flex-wrap:wrap;justify-content:center;gap:1.5rem 2.5rem;
+  margin-top:3rem;
+  position:relative;z-index:2;
+  opacity:0;
+  animation:ahRise 1s ease 1.4s forwards;
+}
+.ah-cred{display:flex;align-items:center;gap:.5rem;font-size:.8rem;color:rgba(255,255,255,.45);font-weight:400;}
+.ah-cred-dot{width:5px;height:5px;border-radius:50%;background:var(--sun);flex-shrink:0;}
+.ah-cred strong{color:rgba(255,255,255,.75);font-weight:600;}
+/* Keyframes */
+@keyframes ahRise{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+@keyframes ahBlurIn{from{opacity:0;filter:blur(12px);transform:translateY(16px);}to{opacity:1;filter:blur(0);transform:translateY(0);}}
+
+
+
+/* SCROLL-EXPANSION HERO */
+.sx-hero{
+  position:relative;
+  height:100vh;
+  overflow:hidden;
+  background:var(--ink);
+  display:flex;align-items:center;justify-content:center;
+}
+.sx-bg{
+  position:absolute;inset:0;
+  background:url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=1920&auto=format&fit=crop') center/cover no-repeat;
+  transition:opacity .1s;
+  z-index:0;
+}
+.sx-bg::after{content:'';position:absolute;inset:0;background:rgba(15,10,0,.55);}
+.sx-media-wrap{
+  position:absolute;
+  top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  border-radius:16px;
+  overflow:hidden;
+  box-shadow:0 0 80px rgba(0,0,0,.5);
+  z-index:2;
+  transition:none;
+  width:320px;height:420px;
+}
+.sx-media-wrap img{
+  width:100%;height:100%;object-fit:cover;display:block;
+}
+.sx-media-overlay{
+  position:absolute;inset:0;
+  background:rgba(0,0,0,.3);
+  border-radius:16px;
+  transition:opacity .2s;
+}
+.sx-titles{
+  position:absolute;
+  top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  z-index:3;
+  text-align:center;
+  pointer-events:none;
+  width:100%;
+}
+.sx-t1{
+  font-family:'Fraunces',serif;
+  font-size:clamp(3rem,8vw,7rem);
+  font-weight:900;
+  color:var(--white);
+  line-height:.95;
+  display:block;
+  will-change:transform;
+}
+.sx-t2{
+  font-family:'Fraunces',serif;
+  font-size:clamp(3rem,8vw,7rem);
+  font-weight:900;
+  color:transparent;
+  -webkit-text-stroke:2px var(--sun);
+  font-style:italic;
+  line-height:.95;
+  display:block;
+  will-change:transform;
+}
+.sx-hint{
+  position:absolute;
+  bottom:2.5rem;left:50%;
+  transform:translateX(-50%);
+  z-index:4;
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+  font-size:.68rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;
+  color:rgba(255,255,255,.45);
+  animation:sxBounce 2s ease-in-out infinite;
+}
+.sx-hint-bar{width:1px;height:36px;background:linear-gradient(to bottom,rgba(245,165,0,.7),transparent);}
+@keyframes sxBounce{0%,100%{transform:translateX(-50%) translateY(0);}50%{transform:translateX(-50%) translateY(7px);}}
+.sx-content{
+  position:absolute;
+  bottom:0;left:0;right:0;
+  padding:2rem 2.5rem;
+  z-index:4;
+  display:flex;justify-content:space-between;align-items:flex-end;
+  opacity:0;
+  transition:opacity .5s;
+  flex-wrap:wrap;gap:1rem;
+}
+.sx-content.show{opacity:1;}
+.sx-cred{display:flex;align-items:center;gap:8px;font-size:.75rem;color:rgba(255,255,255,.6);}
+.sx-cred-dot{width:5px;height:5px;border-radius:50%;background:var(--sun);flex-shrink:0;}
+.sx-cred strong{color:rgba(255,255,255,.9);font-weight:600;}
+.sx-cta-wrap{display:flex;gap:.75rem;flex-wrap:wrap;}
+
+/* SCROLL-PROGRESS BAR */
+.sx-progress{
+  position:absolute;bottom:0;left:0;
+  height:3px;background:var(--sun);
+  z-index:10;width:0%;
+  transition:none;
+}
+
+
+
+@keyframes riseIn{from{opacity:0;transform:translateY(28px);}to{opacity:1;transform:translateY(0);}}
+.btn-sun{background:var(--sun);color:var(--ink);font-family:'Instrument Sans',sans-serif;font-size:.82rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase;padding:14px 28px;border-radius:4px;text-decoration:none;transition:transform .2s,background .2s;display:inline-block;border:none;cursor:pointer;}
+.btn-sun:hover{background:var(--sun-deep);transform:translateY(-2px);}
+.btn-ghost{background:transparent;color:var(--white);font-family:'Instrument Sans',sans-serif;font-size:.82rem;font-weight:500;letter-spacing:.05em;text-transform:uppercase;padding:14px 28px;border-radius:4px;border:1.5px solid rgba(255,255,255,.3);text-decoration:none;transition:border-color .2s;display:inline-block;}
+.btn-ghost:hover{border-color:rgba(255,255,255,.65);}
+
+.mq-wrap{background:var(--sun);padding:.8rem 0;overflow:hidden;border-top:3px solid var(--ink);border-bottom:3px solid var(--ink);}
+.mq-track{display:flex;white-space:nowrap;animation:mq 20s linear infinite;width:max-content;}
+.mq-track:hover{animation-play-state:paused;}
+.mq-item{font-family:'Bebas Neue',sans-serif;font-size:1.35rem;letter-spacing:.12em;color:var(--ink);padding:0 2rem;display:flex;align-items:center;gap:2rem;}
+.mq-dot{width:7px;height:7px;border-radius:50%;background:var(--ink);display:inline-block;flex-shrink:0;}
+@keyframes mq{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+
+/* IFRAMES */
+.component-row{background:var(--ink);padding:0;overflow:hidden;}
+.component-frame{width:100%;border:none;display:block;background:transparent;}
+
+.sec{padding:5rem 2.5rem;}
+.sec-inner{max-width:1160px;margin:0 auto;}
+.lbl{font-size:.67rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:8px;margin-bottom:.75rem;}
+.lbl::before{content:'';display:block;width:20px;height:1.5px;background:var(--muted);}
+.sec-h2{font-family:'Fraunces',serif;font-size:clamp(2.2rem,4.5vw,4rem);font-weight:900;line-height:1.02;}
+.sec-h2 em{font-style:italic;font-weight:300;color:var(--muted);}
+.sec-desc{font-size:.95rem;font-weight:300;color:var(--muted);line-height:1.85;max-width:520px;margin-top:.75rem;}
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .65s ease,transform .65s ease;}
+.reveal.vis{opacity:1;transform:translateY(0);}
+.rd1{transition-delay:.1s;}.rd2{transition-delay:.2s;}.rd3{transition-delay:.3s;}
+
+/* ARROW LINK */
+.arrow-lnk{display:inline-flex;align-items:center;gap:10px;font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;color:inherit;margin-top:auto;padding-top:1.75rem;opacity:.7;transition:opacity .2s,gap .2s;}
+.arrow-lnk:hover{opacity:1;gap:16px;}
+.aline{width:28px;height:1.5px;background:currentColor;position:relative;transition:width .2s;}
+.arrow-lnk:hover .aline{width:42px;}
+.aline::after{content:'';position:absolute;right:-1px;top:-3.5px;width:8px;height:8px;border-right:1.5px solid currentColor;border-top:1.5px solid currentColor;transform:rotate(45deg);}
+
+/* STAG */
+.stag{font-size:.7rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase;padding:5px 12px;border-radius:3px;}
+
+/* ── CAMP SECTION ── */
+.camp-sec{background:var(--sky);color:var(--white);}
+.camp-sec .lbl{color:rgba(255,255,255,.4);}
+.camp-sec .lbl::before{background:rgba(255,255,255,.3);}
+.camp-sec .sec-h2{color:var(--white);}
+.camp-sec .sec-h2 em{color:rgba(255,255,255,.45);}
+.camp-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:4rem;align-items:start;margin-top:3.5rem;}
+@media(max-width:750px){.camp-grid{grid-template-columns:1fr;gap:2.5rem;}}
+.camp-left{}
+.camp-body{font-size:.95rem;font-weight:300;color:rgba(255,255,255,.75);line-height:1.85;margin-bottom:1.5rem;}
+.camp-body strong{color:var(--white);font-weight:600;}
+.camp-activities{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:2rem;}
+.camp-act{display:flex;align-items:center;gap:10px;font-size:.82rem;color:rgba(255,255,255,.75);font-weight:400;}
+.camp-act::before{content:'';display:block;width:6px;height:6px;border-radius:50%;background:var(--sun);flex-shrink:0;}
+.camp-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;margin-bottom:2rem;}
+.camp-stat{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:6px;padding:1.1rem 1.25rem;}
+.camp-stat-n{font-family:'Bebas Neue',sans-serif;font-size:2.4rem;color:var(--sun);line-height:1;letter-spacing:.05em;}
+.camp-stat-l{font-size:.65rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.45);margin-top:3px;}
+
+/* CAMP FORM */
+.camp-form-wrap{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:2rem;}
+.form-title{font-family:'Fraunces',serif;font-size:1.5rem;font-weight:700;color:var(--white);margin-bottom:.4rem;}
+.form-sub{font-size:.82rem;color:rgba(255,255,255,.5);font-weight:300;margin-bottom:1.75rem;line-height:1.6;}
+.frow{margin-bottom:1rem;}
+.frow label{display:block;font-size:.65rem;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:6px;}
+.frow input,.frow select,.frow textarea{width:100%;background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.1);border-radius:5px;padding:12px 14px;font-family:'Instrument Sans',sans-serif;font-size:.88rem;font-weight:300;color:var(--white);outline:none;transition:border-color .2s;}
+.frow input:focus,.frow select:focus,.frow textarea:focus{border-color:rgba(245,165,0,.6);}
+.frow input::placeholder,.frow textarea::placeholder{color:rgba(255,255,255,.2);}
+.frow select option{background:var(--sky-dark);color:var(--white);}
+.frow textarea{resize:vertical;min-height:80px;line-height:1.6;}
+.frow-2{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;}
+@media(max-width:500px){.frow-2{grid-template-columns:1fr;}}
+.days-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem;}
+.day-check{display:none;}
+.day-label{display:flex;align-items:center;justify-content:center;padding:10px;background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.1);border-radius:5px;font-size:.8rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;transition:background .2s,border-color .2s;user-select:none;}
+.day-check:checked+.day-label{background:var(--sun);border-color:var(--sun);color:var(--ink);}
+.fsubmit{width:100%;background:var(--sun);color:var(--ink);font-family:'Instrument Sans',sans-serif;font-size:.85rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:16px;border:none;border-radius:5px;cursor:pointer;margin-top:.75rem;transition:background .2s,transform .2s;}
+.fsubmit:hover{background:var(--sun-deep);transform:translateY(-1px);}
+.form-success{display:none;background:rgba(26,110,46,.3);border:1px solid rgba(26,110,46,.5);border-radius:6px;padding:1.25rem;text-align:center;color:var(--white);font-size:.9rem;line-height:1.6;}
+
+/* ── TECH SECTION ── */
+.tech-sec{background:var(--ink);color:var(--white);}
+.tech-sec .lbl{color:rgba(255,255,255,.35);}
+.tech-sec .lbl::before{background:rgba(255,255,255,.25);}
+.tech-sec .sec-h2{color:var(--white);}
+.tech-sec .sec-h2 em{color:rgba(255,255,255,.35);}
+.tech-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start;margin-top:3.5rem;}
+@media(max-width:750px){.tech-grid{grid-template-columns:1fr;gap:2.5rem;}}
+.tech-body{font-size:.95rem;font-weight:300;color:rgba(255,255,255,.65);line-height:1.85;margin-bottom:1.5rem;}
+.tech-body strong{color:var(--white);font-weight:600;}
+.tech-services{display:flex;flex-direction:column;gap:0;}
+.tserv{padding:1.25rem 0;border-bottom:1px solid rgba(255,255,255,.07);display:flex;gap:1.25rem;align-items:flex-start;}
+.tserv:first-child{border-top:1px solid rgba(255,255,255,.07);}
+.tserv-icon{width:38px;height:38px;border-radius:6px;background:rgba(245,165,0,.1);border:1px solid rgba(245,165,0,.2);display:flex;align-items:center;justify-content:center;font-size:.95rem;flex-shrink:0;}
+.tserv-head{font-size:.9rem;font-weight:600;color:var(--white);margin-bottom:3px;}
+.tserv-sub{font-size:.8rem;color:rgba(255,255,255,.45);font-weight:300;line-height:1.6;}
+.tech-masters{background:rgba(245,165,0,.08);border:1px solid rgba(245,165,0,.2);border-radius:8px;padding:1.5rem;margin-top:1.5rem;}
+.tm-label{font-size:.65rem;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--sun);margin-bottom:.5rem;}
+.tm-text{font-size:.88rem;color:rgba(255,255,255,.7);font-weight:300;line-height:1.7;}
+.tm-text strong{color:var(--white);font-weight:600;}
+
+/* ── FITNESS SECTION ── */
+.fit-sec{background:var(--paper2);border-top:3px solid var(--ink);}
+.fit-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;margin-top:3.5rem;align-items:start;}
+@media(max-width:750px){.fit-grid{grid-template-columns:1fr;gap:2.5rem;}}
+.fit-body{font-size:.95rem;font-weight:300;color:var(--muted);line-height:1.85;margin-bottom:1.5rem;}
+.fit-body strong{color:var(--ink);font-weight:600;}
+.fit-cards{display:flex;flex-direction:column;gap:.75rem;}
+.fcard{background:var(--white);border:1px solid rgba(15,10,0,.08);border-radius:8px;padding:1.4rem 1.5rem;transition:transform .2s,box-shadow .2s;}
+.fcard:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(15,10,0,.08);}
+.fcard-head{font-size:.9rem;font-weight:600;margin-bottom:.35rem;display:flex;align-items:center;gap:10px;}
+.fcard-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.fcard-dot.sun{background:var(--sun);}
+.fcard-dot.sky{background:var(--sky);}
+.fcard-dot.grass{background:var(--grass);}
+.fcard-dot.punch{background:var(--punch);}
+.fcard-body{font-size:.82rem;color:var(--muted);font-weight:300;line-height:1.7;}
+.fit-proof{background:var(--ink);color:var(--white);border-radius:8px;padding:1.75rem;margin-top:1rem;}
+.fp-quote{font-family:'Fraunces',serif;font-size:1.15rem;font-style:italic;font-weight:300;line-height:1.65;color:rgba(255,255,255,.85);margin-bottom:.75rem;}
+.fp-attr{font-size:.7rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.35);}
+
+/* ── SPORTS SECTION ── */
+.sports-sec{background:var(--sun);border-top:3px solid var(--ink);}
+.sports-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;margin-top:3.5rem;align-items:start;}
+@media(max-width:750px){.sports-grid{grid-template-columns:1fr;gap:2.5rem;}}
+.sports-body{font-size:.95rem;font-weight:400;color:rgba(15,10,0,.75);line-height:1.85;margin-bottom:1.5rem;}
+.sports-body strong{color:var(--ink);font-weight:700;}
+.sports-list{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1.5rem;}
+.sport-item{display:flex;align-items:center;gap:10px;padding:.85rem 1rem;background:rgba(15,10,0,.07);border-radius:5px;font-size:.82rem;font-weight:600;}
+.sport-emoji{font-size:1rem;}
+.bbcc-badge{background:var(--ink);color:var(--white);border-radius:8px;padding:1.6rem;}
+.bb-n{font-family:'Bebas Neue',sans-serif;font-size:3.5rem;color:var(--sun);line-height:1;letter-spacing:.05em;}
+.bb-l{font-size:.7rem;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:.75rem;}
+.bb-text{font-size:.85rem;color:rgba(255,255,255,.7);font-weight:300;line-height:1.7;}
+.bb-text strong{color:var(--white);font-weight:600;}
+.coach-cred{background:rgba(15,10,0,.08);border-radius:6px;padding:1.25rem;margin-top:1rem;}
+.cc-label{font-size:.65rem;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:rgba(15,10,0,.55);margin-bottom:.4rem;}
+.cc-text{font-size:.88rem;font-weight:500;color:var(--ink);line-height:1.6;}
+
+/* ── ABOUT SECTION ── */
+.about-sec{background:var(--paper3);border-top:3px solid var(--ink);}
+.about-grid{display:grid;grid-template-columns:1fr 1.3fr;gap:5rem;align-items:start;}
+@media(max-width:750px){.about-grid{grid-template-columns:1fr;gap:2.5rem;}}
+.about-body{font-size:.95rem;font-weight:300;color:var(--muted);line-height:1.9;margin-bottom:1.25rem;}
+.about-body strong{color:var(--ink);font-weight:600;}
+.cred-list{display:flex;flex-direction:column;}
+.cred-row{display:flex;gap:1.25rem;padding:1.5rem 0;border-bottom:1px solid rgba(15,10,0,.1);}
+.cred-row:first-child{border-top:1px solid rgba(15,10,0,.1);}
+.cred-n{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;color:var(--paper3);-webkit-text-stroke:1.5px rgba(15,10,0,.18);line-height:1;flex-shrink:0;width:32px;}
+.cred-head{font-size:.92rem;font-weight:600;margin-bottom:3px;}
+.cred-sub{font-size:.82rem;color:var(--muted);font-weight:300;line-height:1.65;}
+
+/* ── HOW IT WORKS ── */
+.how-sec{background:var(--ink);border-top:3px solid var(--sun);}
+.how-sec .lbl{color:rgba(255,255,255,.3);}
+.how-sec .lbl::before{background:rgba(255,255,255,.2);}
+.how-sec .sec-h2{color:var(--white);}
+.how-sec .sec-h2 em{color:rgba(255,255,255,.35);}
+.steps-row{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;margin-top:3.5rem;}
+@media(max-width:700px){.steps-row{grid-template-columns:1fr;}}
+.step{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:8px;padding:2.25rem 1.75rem;}
+.step-n{font-family:'Bebas Neue',sans-serif;font-size:3.5rem;color:rgba(255,255,255,.08);line-height:1;margin-bottom:.75rem;letter-spacing:.05em;}
+.step-head{font-size:.95rem;font-weight:600;color:var(--white);margin-bottom:.5rem;}
+.step-body{font-size:.82rem;color:rgba(255,255,255,.45);font-weight:300;line-height:1.75;}
+
+/* ── FAQ ── */
+.faq-sec{background:var(--paper);border-top:3px solid var(--ink);}
+.faq-list{margin-top:3rem;display:flex;flex-direction:column;gap:0;}
+.faq-item{border-bottom:1px solid rgba(15,10,0,.1);}
+.faq-item:first-child{border-top:1px solid rgba(15,10,0,.1);}
+.faq-q{width:100%;display:flex;justify-content:space-between;align-items:center;padding:1.4rem 0;background:none;border:none;cursor:pointer;text-align:left;gap:1.5rem;}
+.faq-q-text{font-size:.95rem;font-weight:600;color:var(--ink);line-height:1.4;}
+.faq-icon{width:28px;height:28px;border-radius:50%;border:1.5px solid rgba(15,10,0,.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .2s,border-color .2s;}
+.faq-icon svg{width:12px;height:12px;transition:transform .3s;}
+.faq-item.open .faq-icon{background:var(--sun);border-color:var(--sun);}
+.faq-item.open .faq-icon svg{transform:rotate(45deg);}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .35s ease,padding .35s ease;}
+.faq-a-inner{padding-bottom:1.25rem;font-size:.88rem;font-weight:300;color:var(--muted);line-height:1.85;max-width:680px;}
+.faq-item.open .faq-a{max-height:300px;}
+
+/* ── CONTACT ── */
+.contact-sec{background:var(--paper2);border-top:3px solid var(--ink);}
+.contact-grid{display:grid;grid-template-columns:1fr 1.1fr;gap:4rem;align-items:start;margin-top:3.5rem;}
+@media(max-width:750px){.contact-grid{grid-template-columns:1fr;gap:2.5rem;}}
+.contact-h2{font-family:'Fraunces',serif;font-size:clamp(2rem,4vw,3.5rem);font-weight:900;line-height:1.02;margin-bottom:1rem;}
+.contact-h2 em{font-style:italic;font-weight:300;color:var(--muted);}
+.contact-body{font-size:.9rem;font-weight:300;color:var(--muted);line-height:1.85;margin-bottom:2rem;max-width:360px;}
+.cdetails{display:flex;flex-direction:column;gap:1rem;}
+.cdet{display:flex;align-items:center;gap:1rem;}
+.cdet-dot{width:7px;height:7px;border-radius:50%;background:var(--sun-deep);flex-shrink:0;}
+.cdet-lbl{font-size:.65rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--muted2);width:68px;flex-shrink:0;}
+.cdet-val{font-size:.88rem;color:var(--ink);font-weight:400;}
+.cform2{background:var(--white);border:1px solid rgba(15,10,0,.08);border-radius:10px;padding:2rem;}
+.frow2{margin-bottom:1rem;}
+.frow2 label{display:block;font-size:.65rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;}
+.frow2 input,.frow2 select,.frow2 textarea{width:100%;background:var(--paper);border:1.5px solid rgba(15,10,0,.1);border-radius:5px;padding:12px 14px;font-family:'Instrument Sans',sans-serif;font-size:.88rem;color:var(--ink);outline:none;transition:border-color .2s;}
+.frow2 input:focus,.frow2 select:focus,.frow2 textarea:focus{border-color:var(--sun-deep);}
+.frow2 input::placeholder,.frow2 textarea::placeholder{color:var(--muted2);}
+.frow2 textarea{resize:vertical;min-height:100px;line-height:1.6;}
+.fsubmit2{width:100%;background:var(--ink);color:var(--white);font-family:'Instrument Sans',sans-serif;font-size:.85rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:16px;border:none;border-radius:5px;cursor:pointer;margin-top:.5rem;transition:background .2s,transform .2s;}
+.fsubmit2:hover{background:var(--sun-deep);transform:translateY(-1px);}
+
+/* ── EXPANDING SERVICE CARDS ── */
+.cards-sec{padding:5rem 2.5rem;background:var(--paper);}
+.cards-sec-inner{max-width:1160px;margin:0 auto;}
+.cards-intro{text-align:center;margin-bottom:3.5rem;}
+.cards-intro-lbl{font-size:.68rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:.75rem;display:flex;align-items:center;justify-content:center;gap:8px;}
+.cards-intro-lbl::before,.cards-intro-lbl::after{content:'';display:block;width:24px;height:1.5px;background:var(--muted);}
+.cards-intro-h2{font-family:'Fraunces',serif;font-size:clamp(2rem,4vw,3.5rem);font-weight:900;line-height:1.05;}
+.cards-intro-h2 em{font-style:italic;font-weight:300;color:var(--muted);}
+.cards-intro-sub{font-size:.95rem;font-weight:300;color:var(--muted);margin-top:.75rem;line-height:1.8;}
+
+.exp-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+@media(max-width:680px){.exp-grid{grid-template-columns:1fr;}}
+
+.exp-card{
+  border-radius:12px;
+  overflow:hidden;
+  cursor:pointer;
+  transition:transform .2s;
+  position:relative;
+}
+.exp-card:hover{transform:translateY(-2px);}
+.exp-card.camp-card{background:var(--sky);}
+.exp-card.tech-card{background:var(--ink);}
+.exp-card.fit-card{background:var(--punch);}
+.exp-card.sports-card{background:var(--sun);}
+
+/* Card header — always visible */
+.exp-head{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:1.75rem 2rem;
+  gap:1rem;
+  user-select:none;
+}
+.exp-head-left{display:flex;align-items:center;gap:1rem;}
+.exp-icon{font-size:1.6rem;flex-shrink:0;}
+.exp-name{
+  font-family:'Fraunces',serif;
+  font-size:clamp(1.4rem,2.5vw,2rem);
+  font-weight:700;
+  color:var(--white);
+  line-height:1.1;
+}
+.sports-card .exp-name{color:var(--ink);}
+.exp-hook{font-size:.8rem;font-weight:300;color:rgba(255,255,255,.6);margin-top:3px;line-height:1.5;}
+.sports-card .exp-hook{color:rgba(15,10,0,.6);}
+.exp-badge{
+  font-size:.62rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
+  padding:5px 11px;border-radius:100px;white-space:nowrap;flex-shrink:0;
+}
+.camp-card .exp-badge{background:rgba(255,255,255,.15);color:rgba(255,255,255,.8);}
+.tech-card .exp-badge{background:rgba(245,165,0,.15);color:var(--sun);}
+.fit-card .exp-badge{background:rgba(255,255,255,.15);color:rgba(255,255,255,.8);}
+.sports-card .exp-badge{background:rgba(15,10,0,.1);color:rgba(15,10,0,.7);}
+.exp-toggle{
+  width:34px;height:34px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+  transition:background .2s,transform .35s;
+  font-size:1.1rem;font-weight:300;
+  color:rgba(255,255,255,.7);
+}
+.camp-card .exp-toggle,.fit-card .exp-toggle,.tech-card .exp-toggle{border:1.5px solid rgba(255,255,255,.2);}
+.sports-card .exp-toggle{border:1.5px solid rgba(15,10,0,.2);color:rgba(15,10,0,.6);}
+.exp-card.open .exp-toggle{transform:rotate(45deg);}
+.camp-card.open .exp-toggle,.fit-card.open .exp-toggle,.tech-card.open .exp-toggle{background:rgba(255,255,255,.1);}
+.sports-card.open .exp-toggle{background:rgba(15,10,0,.08);}
+
+/* Card body — expands */
+.exp-body{
+  max-height:0;overflow:hidden;
+  transition:max-height .5s cubic-bezier(.4,0,.2,1);
+}
+.exp-card.open .exp-body{max-height:2400px;}
+.exp-body-inner{
+  padding:0 2rem 2rem;
+}
+.exp-divider{height:1px;background:rgba(255,255,255,.1);margin-bottom:1.5rem;}
+.sports-card .exp-divider{background:rgba(15,10,0,.1);}
+.exp-desc{font-size:.88rem;font-weight:300;line-height:1.85;color:rgba(255,255,255,.75);margin-bottom:1.25rem;}
+.sports-card .exp-desc{color:rgba(15,10,0,.7);}
+.exp-desc strong{font-weight:600;color:rgba(255,255,255,.95);}
+.sports-card .exp-desc strong{color:var(--ink);}
+.exp-tags{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1.5rem;}
+.exp-tag{font-size:.7rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase;padding:5px 12px;border-radius:3px;}
+.camp-card .exp-tag,.fit-card .exp-tag,.tech-card .exp-tag{background:rgba(255,255,255,.1);color:rgba(255,255,255,.8);}
+.sports-card .exp-tag{background:rgba(15,10,0,.08);color:rgba(15,10,0,.7);}
+
+/* Inline form inside card */
+.exp-form{
+  background:rgba(255,255,255,.07);
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:8px;
+  padding:1.5rem;
+  margin-top:1rem;
+}
+.sports-card .exp-form{background:rgba(15,10,0,.06);border-color:rgba(15,10,0,.12);}
+.exp-form-title{font-family:'Fraunces',serif;font-size:1.1rem;font-weight:700;color:var(--white);margin-bottom:.25rem;}
+.sports-card .exp-form-title{color:var(--ink);}
+.exp-form-sub{font-size:.75rem;color:rgba(255,255,255,.4);font-weight:300;margin-bottom:1rem;line-height:1.5;}
+.sports-card .exp-form-sub{color:rgba(15,10,0,.45);}
+.ef-row{margin-bottom:.75rem;}
+.ef-row label{display:block;font-size:.62rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:5px;}
+.sports-card .ef-row label{color:rgba(15,10,0,.4);}
+.ef-row input,.ef-row select,.ef-row textarea{
+  width:100%;
+  background:rgba(255,255,255,.06);
+  border:1.5px solid rgba(255,255,255,.12);
+  border-radius:5px;
+  padding:10px 13px;
+  font-family:'Instrument Sans',sans-serif;
+  font-size:.85rem;font-weight:300;
+  color:var(--white);
+  outline:none;
+  transition:border-color .2s;
+}
+.sports-card .ef-row input,.sports-card .ef-row select,.sports-card .ef-row textarea{
+  background:rgba(15,10,0,.05);
+  border-color:rgba(15,10,0,.12);
+  color:var(--ink);
+}
+.ef-row input:focus,.ef-row select:focus,.ef-row textarea:focus{border-color:rgba(245,165,0,.6);}
+.ef-row input::placeholder,.ef-row textarea::placeholder{color:rgba(255,255,255,.2);}
+.sports-card .ef-row input::placeholder,.sports-card .ef-row textarea::placeholder{color:rgba(15,10,0,.3);}
+.ef-row textarea{resize:vertical;min-height:70px;line-height:1.6;}
+.ef-row select option{background:#1a1400;color:var(--white);}
+.sports-card .ef-row select option{background:#faeeda;color:var(--ink);}
+.ef-2{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;}
+@media(max-width:500px){.ef-2{grid-template-columns:1fr;}}
+.ef-days{display:grid;grid-template-columns:repeat(3,1fr);gap:.4rem;}
+.ef-day-chk{display:none;}
+.ef-day-lbl{
+  display:flex;align-items:center;justify-content:center;
+  padding:9px 6px;
+  background:rgba(255,255,255,.07);
+  border:1.5px solid rgba(255,255,255,.12);
+  border-radius:5px;
+  font-size:.72rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;
+  cursor:pointer;transition:background .2s,border-color .2s;
+  color:rgba(255,255,255,.7);user-select:none;
+}
+.ef-day-chk:checked+.ef-day-lbl{background:var(--sun);border-color:var(--sun);color:var(--ink);}
+.ef-submit{
+  width:100%;
+  font-family:'Instrument Sans',sans-serif;
+  font-size:.8rem;font-weight:600;letter-spacing:.07em;text-transform:uppercase;
+  padding:13px;border:none;border-radius:5px;cursor:pointer;
+  margin-top:.75rem;
+  background:var(--sun);color:var(--ink);
+  transition:background .2s,transform .15s;
+}
+.ef-submit:hover{background:var(--sun-deep);transform:translateY(-1px);}
+.ef-success{
+  display:none;margin-top:.75rem;
+  background:rgba(26,110,46,.25);border:1px solid rgba(26,110,46,.4);
+  border-radius:6px;padding:1rem;
+  font-size:.85rem;color:rgba(255,255,255,.85);text-align:center;line-height:1.6;
+}
+.sports-card .ef-success{color:var(--ink);}
+
+/* FOOTER */
+footer{background:var(--ink);border-top:1px solid rgba(255,255,255,.06);padding:1.75rem 2.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;}
+.footer-name{font-family:'Fraunces',serif;font-size:1.15rem;font-weight:700;color:var(--white);}
+.footer-name em{font-style:italic;font-weight:300;color:rgba(255,255,255,.35);font-size:.85em;}
+.footer-copy{font-size:.7rem;color:rgba(255,255,255,.22);letter-spacing:.08em;}
+</style>
+</head>
+<body>
+
+<div class="cur" id="cur"></div>
+<div class="cur-ring" id="curR"></div>
+
+<!-- FLOATING NAV -->
+<header class="hh-header" id="hhHeader">
+  <div class="hh-inner" id="hhInner">
+    <a href="#" class="hh-logo">BBCC <em>Summer</em></a>
+    <div class="hh-links">
+      <a href="#camp" class="hh-link">🏕 Camp</a>
+      <a href="#tech" class="hh-link">💻 Tech</a>
+      <a href="#fitness" class="hh-link">💪 Fitness</a>
+      <a href="#sports" class="hh-link">⚾ Sports</a>
+      <a href="#about" class="hh-link">About</a>
+      <a href="#faq" class="hh-link">FAQ</a>
+    </div>
+    <a href="#contact" class="hh-cta">Get In Touch →</a>
+    <button class="hh-hamburger" id="hhHamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+<!-- MOBILE DRAWER -->
+<div class="hh-drawer" id="hhDrawer">
+  <button class="hh-close" onclick="closeDrawer()">✕</button>
+  <a href="#camp" class="hh-link" onclick="closeDrawer()">🏕 Kids Camp</a>
+  <a href="#tech" class="hh-link" onclick="closeDrawer()">💻 Tech Help</a>
+  <a href="#fitness" class="hh-link" onclick="closeDrawer()">💪 Fitness</a>
+  <a href="#sports" class="hh-link" onclick="closeDrawer()">⚾ Sports</a>
+  <a href="#about" class="hh-link" onclick="closeDrawer()">About</a>
+  <a href="#faq" class="hh-link" onclick="closeDrawer()">FAQ</a>
+  <a href="#contact" class="hh-cta" onclick="closeDrawer()">Get In Touch →</a>
+</div>
+
+<!-- SCROLL-EXPANSION HERO (ScrollExpandMedia) -->
+<div class="sx-outer" id="sxOuter">
+  <div class="sx-sticky" id="sxSticky">
+    <div class="sx-bg" id="sxBg"></div>
+    <div class="sx-media" id="sxMedia">
+      <video autoplay muted loop playsinline preload="auto"
+        src="https://me7aitdbxq.ufs.sh/f/2wsMIGDMQRdYuZ5R8ahEEZ4aQK56LizRdfBSqeDMsmUIrJN1"
+        poster="https://images.pexels.com/videos/5752729/space-earth-universe-cosmos-5752729.jpeg">
+      </video>
+      <div class="sx-veil" id="sxVeil"></div>
+    </div>
+    <div class="sx-titles">
+      <span class="sx-t1" id="sxT1">BBCC's Best</span>
+      <span class="sx-t2" id="sxT2">Kept Secret.</span>
+    </div>
+    <div class="sx-scroll-hint" id="sxHint">
+      <div class="sx-scroll-hint-bar"></div>
+      Scroll to explore
+    </div>
+    <div class="sx-endcontent" id="sxEnd">
+      <div class="sx-info">
+        <div class="sx-info-line"><div class="sx-info-dot"></div><span><strong>M.S. in Technology</strong> · 13-Year Varsity Coach · Lower Merion</span></div>
+        <div class="sx-info-line"><div class="sx-info-dot"></div><span><strong>7 Years in BBCC</strong> · Kids Camp · Tech · Fitness · Sports</span></div>
+      </div>
+      <div class="sx-btns">
+        <a href="#camp" class="btn-sun" style="font-size:.8rem;padding:12px 24px;">See Services</a>
+        <a href="#contact" class="btn-ghost" style="font-size:.8rem;padding:12px 24px;color:var(--white);border-color:rgba(255,255,255,.3);">Get In Touch</a>
+      </div>
+    </div>
+    <div class="sx-pbar" id="sxPbar"></div>
+  </div>
+</div>
+
+<!-- ANIMATED HERO -->
+<section class="ah-hero" id="ah-hero">
+  <div class="ah-beam"></div>
+  <div class="ah-bgimg"></div>
+
+  <div class="ah-badge">
+    ✦ BBCC Community · Summer 2026
+    <span class="ah-badge-arrow">→</span>
+  </div>
+
+  <h1 class="ah-h1">
+    BBCC's Best<br><em>Kept Secret.</em>
+  </h1>
+
+  <p class="ah-sub">
+    A <strong>Lower Merion Phys Ed, Health & Leadership teacher and 13-year varsity coach</strong> living right here in BBCC — available for kids camp, tech help, fitness training, and sports coaching.
+  </p>
+
+  <div class="ah-btns">
+    <a href="#camp" class="btn-sun" style="font-size:.85rem;padding:14px 32px;">See All Services</a>
+    <a href="#contact" class="btn-ghost" style="font-size:.85rem;padding:14px 32px;">Get In Touch</a>
+  </div>
+
+  <div class="ah-mock">
+    <div class="ah-mock-fade"></div>
+    <div style="background:linear-gradient(135deg,rgba(20,85,164,.4),rgba(15,10,0,.8),rgba(245,165,0,.15));width:100%;aspect-ratio:15/8;border-radius:16px;display:flex;align-items:center;justify-content:center;">
+      <div style="text-align:center;padding:3rem;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:clamp(2rem,5vw,4.5rem);color:var(--sun);letter-spacing:.1em;line-height:1;">BBCC</div>
+        <div style="font-family:'Fraunces',serif;font-size:clamp(1rem,2.5vw,2rem);color:rgba(255,255,255,.7);font-style:italic;font-weight:300;margin-top:.25rem;">Summer 2026</div>
+        <div style="display:flex;gap:1.5rem;justify-content:center;margin-top:1.5rem;flex-wrap:wrap;">
+          <span style="font-size:.75rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.4);">Camp</span>
+          <span style="color:rgba(245,165,0,.4);">·</span>
+          <span style="font-size:.75rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.4);">Tech</span>
+          <span style="color:rgba(245,165,0,.4);">·</span>
+          <span style="font-size:.75rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.4);">Fitness</span>
+          <span style="color:rgba(245,165,0,.4);">·</span>
+          <span style="font-size:.75rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.4);">Sports</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ah-creds">
+    <div class="ah-cred"><div class="ah-cred-dot"></div><span><strong>M.S. in Technology</strong></span></div>
+    <div class="ah-cred"><div class="ah-cred-dot"></div><span><strong>13-Year Varsity Coach</strong> · Lower Merion HS</span></div>
+    <div class="ah-cred"><div class="ah-cred-dot"></div><span><strong>7 Years in BBCC</strong> · Trusted by Neighbors</span></div>
+    <div class="ah-cred"><div class="ah-cred-dot"></div><span><strong>Phys Ed, Health & Leadership Teacher</strong> · Lower Merion</span></div>
+  </div>
+</section>
+
+
+
+
+<!-- ══ SERVICES — EXPANDING CARDS ══ -->
+<section class="cards-sec" id="services">
+  <div class="cards-sec-inner">
+    <div class="cards-intro reveal">
+      <div class="cards-intro-lbl">What I Offer</div>
+      <h2 class="cards-intro-h2">Four ways to make<br><em>your summer easier</em></h2>
+      <p class="cards-intro-sub">Tap any card to see full details and submit your interest. All services available right here in BBCC.</p>
+    </div>
+
+    <div class="exp-grid">
+
+      <!-- ── CAMP CARD ── -->
+      <div class="exp-card camp-card" id="card-camp" onclick="toggleCard('camp')">
+        <div class="exp-head">
+          <div class="exp-head-left">
+            <span class="exp-icon">🏕</span>
+            <div>
+              <div class="exp-name">Kids Camp</div>
+              <div class="exp-hook">Tues, Wed & Thurs · Ages 5–13 · Summer Only</div>
+            </div>
+          </div>
+          <span class="exp-badge">☀️ Summer 2026</span>
+          <span class="exp-toggle">+</span>
+        </div>
+        <div class="exp-body" id="body-camp">
+          <div class="exp-body-inner">
+            <div class="exp-divider"></div>
+            <p class="exp-desc">Drop your kids off knowing they're in the hands of a <strong>licensed Phys Ed, Health & Leadership teacher</strong> with over a decade of coaching experience — right here at BBCC. Pool, tennis, pickleball, basketball, arts & crafts, playground, and indoor chill time.</p>
+            <p class="exp-desc"><strong>Flexible by design</strong> — sessions run anywhere from 1 to 5 hours depending on what your family needs. You tell me what works, I'll make it happen. <strong>Summer 2026 only.</strong></p>
+            <div class="exp-tags">
+              <span class="exp-tag">Swimming</span>
+              <span class="exp-tag">Basketball</span>
+              <span class="exp-tag">Tennis & Pickleball</span>
+              <span class="exp-tag">Arts & Crafts</span>
+              <span class="exp-tag">1–5 Hours Flexible</span>
+              <span class="exp-tag">Ages 5–13</span>
+            </div>
+            <div class="exp-form">
+              <div class="exp-form-title">Submit Interest</div>
+              <div class="exp-form-sub">I'll reach out within 24 hours to talk through details.</div>
+              <div class="ef-2">
+                <div class="ef-row"><label>Parent Name</label><input type="text" placeholder="Your full name"></div>
+                <div class="ef-row"><label>Phone or Email</label><input type="text" placeholder="Best way to reach you"></div>
+              </div>
+              <div class="ef-2">
+                <div class="ef-row"><label>Child's Name</label><input type="text" placeholder="First name"></div>
+                <div class="ef-row"><label>Child's Age</label><input type="number" placeholder="5–13" min="5" max="13"></div>
+              </div>
+              <div class="ef-row"><label>Number of Kids</label>
+                <select><option value="">Select...</option><option>1 child</option><option>2 children</option><option>3 children</option><option>4+ children</option></select>
+              </div>
+              <div class="ef-row"><label>Days Interested</label>
+                <div class="ef-days">
+                  <div><input class="ef-day-chk" type="checkbox" id="c-tue"><label class="ef-day-lbl" for="c-tue">Tuesday</label></div>
+                  <div><input class="ef-day-chk" type="checkbox" id="c-wed"><label class="ef-day-lbl" for="c-wed">Wednesday</label></div>
+                  <div><input class="ef-day-chk" type="checkbox" id="c-thu"><label class="ef-day-lbl" for="c-thu">Thursday</label></div>
+                </div>
+              </div>
+              <div class="ef-row"><label>Notes / Special Needs</label><textarea placeholder="Allergies, swim ability, anything I should know..."></textarea></div>
+              <button class="ef-submit" onclick="submitCard(event,'camp-ok')">Submit Interest →</button>
+              <div class="ef-success" id="camp-ok">✓ Got it! I'll be in touch within 24 hours. Looking forward to a great summer!</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── TECH CARD ── -->
+      <div class="exp-card tech-card" id="card-tech" onclick="toggleCard('tech')">
+        <div class="exp-head">
+          <div class="exp-head-left">
+            <span class="exp-icon">💻</span>
+            <div>
+              <div class="exp-name">Tech Help</div>
+              <div class="exp-hook">At your home · M.S. in Technology · Available Now</div>
+            </div>
+          </div>
+          <span class="exp-badge">Available Now</span>
+          <span class="exp-toggle">+</span>
+        </div>
+        <div class="exp-body" id="body-tech">
+          <div class="exp-body-inner">
+            <div class="exp-divider"></div>
+            <p class="exp-desc">I come to you, fix it, and <strong>teach you as I go</strong> so it doesn't happen again. I hold a <strong>Master's degree in Technology</strong> — not just tech-savvy, formally trained. Same-day availability most of the time.</p>
+            <p class="exp-desc">Huge opportunity right now: <strong>ChatGPT, Claude, Gemini & Canva</strong> are saving people hours every week. I'll show you exactly how to use them for your life — writing, planning, design, business tasks. It's time to get with the times.</p>
+            <div class="exp-tags">
+              <span class="exp-tag">ChatGPT · Claude · Gemini</span>
+              <span class="exp-tag">Canva & Design</span>
+              <span class="exp-tag">Website Creation</span>
+              <span class="exp-tag">Computers & Laptops</span>
+              <span class="exp-tag">iPhone & Android</span>
+              <span class="exp-tag">Calendar & Email</span>
+              <span class="exp-tag">Wi-Fi & Smart TV</span>
+              <span class="exp-tag">Ring & Smart Home</span>
+            </div>
+            <div class="exp-form">
+              <div class="exp-form-title">Submit Interest</div>
+              <div class="exp-form-sub">Tell me what you need — I'll reach out to set something up.</div>
+              <div class="ef-2">
+                <div class="ef-row"><label>Your Name</label><input type="text" placeholder="First & last name"></div>
+                <div class="ef-row"><label>Phone or Email</label><input type="text" placeholder="Best way to reach you"></div>
+              </div>
+              <div class="ef-row"><label>What do you need help with?</label>
+                <select><option value="">Select...</option><option>Learning ChatGPT / Claude / Gemini</option><option>Learning Canva</option><option>Website Creation</option><option>Computer / Laptop Issues</option><option>Phone Help</option><option>Calendar & Email Setup</option><option>Smart TV / Wi-Fi / Streaming</option><option>Not sure — just reach out</option></select>
+              </div>
+              <div class="ef-row"><label>Any details?</label><textarea placeholder="What's going on, what you want to learn..."></textarea></div>
+              <button class="ef-submit" onclick="submitCard(event,'tech-ok')">Submit Interest →</button>
+              <div class="ef-success" id="tech-ok">✓ Got it! I'll be in touch soon.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── FITNESS CARD ── -->
+      <div class="exp-card fit-card" id="card-fit" onclick="toggleCard('fit')">
+        <div class="exp-head">
+          <div class="exp-head-left">
+            <span class="exp-icon">💪</span>
+            <div>
+              <div class="exp-name">Fitness Training</div>
+              <div class="exp-hook">BBCC gym · 1-on-1 or groups · Available Now</div>
+            </div>
+          </div>
+          <span class="exp-badge">Available Now</span>
+          <span class="exp-toggle">+</span>
+        </div>
+        <div class="exp-body" id="body-fit">
+          <div class="exp-body-inner">
+            <div class="exp-divider"></div>
+            <p class="exp-desc">You always push harder with a trainer. That's not a pitch — that's science. Every program is <strong>custom-built for BBCC gym equipment</strong> with demo videos for every exercise. I train consistently myself and I practice what I preach — you'll see the results.</p>
+            <p class="exp-desc">Want to split the cost? <strong>Small group workouts</strong> (2–5 people) bring the energy of a class with the attention of a personal trainer. Grab your neighbors.</p>
+            <div class="exp-tags">
+              <span class="exp-tag">Custom Programs</span>
+              <span class="exp-tag">Demo Videos Included</span>
+              <span class="exp-tag">1-on-1 Training</span>
+              <span class="exp-tag">Small Groups (2–5)</span>
+              <span class="exp-tag">Meal Planning</span>
+              <span class="exp-tag">Progress Tracking</span>
+            </div>
+            <div class="exp-form">
+              <div class="exp-form-title">Submit Interest</div>
+              <div class="exp-form-sub">Tell me your goals — I'll put together a plan.</div>
+              <div class="ef-2">
+                <div class="ef-row"><label>Your Name</label><input type="text" placeholder="First & last name"></div>
+                <div class="ef-row"><label>Phone or Email</label><input type="text" placeholder="Best way to reach you"></div>
+              </div>
+              <div class="ef-row"><label>I'm interested in</label>
+                <select><option value="">Select...</option><option>1-on-1 Training</option><option>Small Group Workouts</option><option>Custom Workout Program</option><option>Meal Planning</option><option>All of the above</option></select>
+              </div>
+              <div class="ef-row"><label>Goals & Details</label><textarea placeholder="What you're working toward, current fitness level..."></textarea></div>
+              <button class="ef-submit" onclick="submitCard(event,'fit-ok')">Submit Interest →</button>
+              <div class="ef-success" id="fit-ok">✓ Got it! I'll reach out soon to talk through a plan.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── SPORTS CARD ── -->
+      <div class="exp-card sports-card" id="card-sports" onclick="toggleCard('sports')">
+        <div class="exp-head">
+          <div class="exp-head-left">
+            <span class="exp-icon">⚾</span>
+            <div>
+              <div class="exp-name">Sports Training</div>
+              <div class="exp-hook">All ages · All sports · 7 years in BBCC</div>
+            </div>
+          </div>
+          <span class="exp-badge">Available Now</span>
+          <span class="exp-toggle">+</span>
+        </div>
+        <div class="exp-body" id="body-sports">
+          <div class="exp-body-inner">
+            <div class="exp-divider"></div>
+            <p class="exp-desc"><strong>13-year Varsity Boys Basketball Coach at Lower Merion HS.</strong> I've been doing sports training right here in BBCC for 7 years — ask your neighbors, they know me. Real references available, no problem.</p>
+            <p class="exp-desc">1-on-1 sessions or small groups. Kids, teens, and adults. All skill levels — from first time picking up a ball to competing at a high level.</p>
+            <div class="exp-tags">
+              <span class="exp-tag">🏀 Basketball</span>
+              <span class="exp-tag">⚾ Baseball</span>
+              <span class="exp-tag">⚽ Soccer</span>
+              <span class="exp-tag">🎾 Tennis</span>
+              <span class="exp-tag">🏓 Pickleball</span>
+              <span class="exp-tag">Any Sport</span>
+              <span class="exp-tag">1-on-1 or Group</span>
+              <span class="exp-tag">All Ages</span>
+            </div>
+            <div class="exp-form">
+              <div class="exp-form-title">Submit Interest</div>
+              <div class="exp-form-sub">Tell me the sport and what you're working on.</div>
+              <div class="ef-2">
+                <div class="ef-row"><label>Your Name</label><input type="text" placeholder="First & last name"></div>
+                <div class="ef-row"><label>Phone or Email</label><input type="text" placeholder="Best way to reach you"></div>
+              </div>
+              <div class="ef-2">
+                <div class="ef-row"><label>Sport</label>
+                  <select><option value="">Select...</option><option>Basketball</option><option>Baseball</option><option>Soccer</option><option>Tennis</option><option>Pickleball</option><option>Other / Multiple</option></select>
+                </div>
+                <div class="ef-row"><label>Session Type</label>
+                  <select><option value="">Select...</option><option>1-on-1</option><option>Small Group (2–4)</option><option>Not sure yet</option></select>
+                </div>
+              </div>
+              <div class="ef-row"><label>Age & Details</label><textarea placeholder="Age, skill level, what you want to work on..."></textarea></div>
+              <button class="ef-submit" onclick="submitCard(event,'sports-ok')">Submit Interest →</button>
+              <div class="ef-success" id="sports-ok">✓ Got it! I'll be in touch soon.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- end exp-grid -->
+  </div>
+</section>
+
+<!-- ══ ABOUT ══ -->
+<section class="sec about-sec" id="about">
+  <div class="sec-inner">
+    <div class="about-grid">
+      <div class="reveal">
+        <div class="lbl">About</div>
+        <h2 class="sec-h2">Not a stranger.<br><em>A neighbor.</em></h2>
+        <p class="about-body" style="margin-top:1.25rem;">I'm a Physical Education teacher at Lower Merion, a 13-year varsity basketball coach, and a BBCC resident of 7 years. I hold a Master's degree in Technology and have coaching experience across nearly every sport.</p>
+        <p class="about-body">With both my kids in camp this summer, I have real availability to help the community with things I genuinely love: <strong>working with kids, coaching sports, solving tech problems, and helping people get healthy.</strong></p>
+        <p class="about-body">Seven years in this community means I'm not a stranger. I know the facilities, I know the families, and I have the recommendations to prove it. No big company, no corporate pricing. Just a neighbor who's genuinely good at what he does.</p>
+        <a href="#contact" class="arrow-lnk" style="color:var(--ink);padding-top:1.5rem;">Get in touch <span class="aline"></span></a>
+      </div>
+      <div class="reveal rd1">
+        <div class="cred-list">
+          <div class="cred-row"><div class="cred-n">01</div><div><div class="cred-head">Phys Ed, Health & Leadership Teacher · Lower Merion</div><div class="cred-sub">Years of professional experience working with kids of all ages, fitness levels, and athletic backgrounds</div></div></div>
+          <div class="cred-row"><div class="cred-n">02</div><div><div class="cred-head">Varsity Boys Basketball Coach · 13 Years · LMHS</div><div class="cred-sub">One of the longest-tenured coaches in the district. Proven track record developing athletes from youth through varsity level</div></div></div>
+          <div class="cred-row"><div class="cred-n">03</div><div><div class="cred-head">Master's Degree in Technology</div><div class="cred-sub">Formally trained — not just tech-savvy. Deep understanding of systems, software, and modern tools including AI</div></div></div>
+          <div class="cred-row"><div class="cred-n">04</div><div><div class="cred-head">7 Years in BBCC</div><div class="cred-sub">Embedded in this community. My kids grew up here, I coach here, and my neighbors trust me. References available upon request</div></div></div>
+          <div class="cred-row"><div class="cred-n">05</div><div><div class="cred-head">Multi-Sport Coaching Background</div><div class="cred-sub">Basketball, baseball, soccer, tennis, pickleball and more — individual and group settings, kids through adults</div></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ HOW IT WORKS ══ -->
+<section class="sec how-sec">
+  <div class="sec-inner">
+    <div class="reveal">
+      <div class="lbl">Simple Process</div>
+      <h2 class="sec-h2" style="color:var(--white);">Three steps. <em>That's it.</em></h2>
+    </div>
+    <div class="steps-row">
+      <div class="step reveal"><div class="step-n">01</div><div class="step-head">Reach Out</div><div class="step-body">Fill out the form, send a text, or email me. Tell me what you're interested in and when works for you. I respond fast — same neighborhood.</div></div>
+      <div class="step reveal rd1"><div class="step-n">02</div><div class="step-head">Quick Conversation</div><div class="step-body">We talk for 5–10 minutes to make sure I understand exactly what you need and what will work best. No sales pitch. Just figuring out a plan.</div></div>
+      <div class="step reveal rd2"><div class="step-n">03</div><div class="step-head">We Get Started</div><div class="step-body">Show up, do the work, get results. No contracts, no apps to download, no corporate onboarding. Neighbor helping neighbor.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FAQ ══ -->
+<section class="sec faq-sec" id="faq">
+  <div class="sec-inner">
+    <div class="reveal">
+      <div class="lbl">FAQ</div>
+      <h2 class="sec-h2">Common questions, <em>answered.</em></h2>
+    </div>
+    <div class="faq-list reveal rd1">
+      <div class="faq-item">
+        <button class="faq-q"><span class="faq-q-text">What ages are the camp days for?</span><span class="faq-icon"><svg viewBox="0 0 12 12" fill="none"><line x1="6" y1="1" x2="6" y2="11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="1" y1="6" x2="11" y2="6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span></button>
+        <div class="faq-a"><div class="faq-a-inner">Camp days are designed for kids ages 5–13. If your child is slightly outside that range, reach out anyway — I'm flexible and happy to talk through it. The structure is set up to work well for a mixed age group, where older kids often help and mentor the younger ones naturally.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q"><span class="faq-q-text">How does the camp day actually run?</span><span class="faq-icon"><svg viewBox="0 0 12 12" fill="none"><line x1="6" y1="1" x2="6" y2="11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="1" y1="6" x2="11" y2="6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span></button>
+        <div class="faq-a"><div class="faq-a-inner">Sessions are completely flexible — anywhere from 1 to 5 hours depending on what works for your family. Need just an hour while you run errands? Done. Need a full 5-hour day while you're at work? Also done. You tell me what works, I'll make it happen. Most families land somewhere in the 2–4 hour range, but there's no set requirement.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q"><span class="faq-q-text">Do I need to sign up for all three days, or can I pick?</span><span class="faq-icon"><svg viewBox="0 0 12 12" fill="none"><line x1="6" y1="1" x2="6" y2="11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="1" y1="6" x2="11" y2="6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span></button>
+        <div class="faq-a"><div class="faq-a-inner">You can pick whatever days work for your schedule. Some families do all three, some do just Tuesdays and Thursdays. There's no requirement to commit to every day — flexibility is the whole point. Just let me know which days you're interested in on the form and we'll go from there.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q"><span class="faq-q-text">What kind of tech issues can you help with?</span><span class="faq-icon"><svg viewBox="0 0 12 12" fill="none"><line x1="6" y1="1" x2="6" y2="11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="1" y1="6" x2="11" y2="6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span></button>
+        <div class="faq-a"><div class="faq-a-inner">Honestly — almost anything. Slow computers, phone setup, Wi-Fi problems, setting up a new TV, backing up photos, getting started with AI tools like ChatGPT, Ring cameras, password managers, Zoom, email problems, and much more. I hold a Master's degree in Technology, so if it's a tech problem, there's a very good chance I can solve it. If something is beyond my scope, I'll tell you upfront.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q"><span class="faq-q-text">Can my kids do sports training even if they're beginners?</span><span class="faq-icon"><svg viewBox="0 0 12 12" fill="none"><line x1="6" y1="1" x2="6" y2="11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="1" y1="6" x2="11" y2="6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span></button>
+        <div class="faq-a"><div class="faq-a-inner">Absolutely — beginners are welcome and honestly some of the most rewarding to work with. I've worked with kids who've never held a basketball and adults who are picking up pickleball for the first time. Every session starts where you are, not where someone else is. The goal is always progress and enjoyment — not pressure.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q"><span class="faq-q-text">How do fitness sessions work if I don't have equipment at home?</span><span class="faq-icon"><svg viewBox="0 0 12 12" fill="none"><line x1="6" y1="1" x2="6" y2="11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="1" y1="6" x2="11" y2="6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span></button>
+        <div class="faq-a"><div class="faq-a-inner">That's exactly why I build programs around the BBCC gym — you already have access to it. Every workout I design is tailored to the specific equipment available there, so you're not trying to adapt a program meant for a commercial gym. I'll also provide demo videos for every exercise so you're never confused about form or technique when training on your own.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q"><span class="faq-q-text">Can you provide references from other BBCC families?</span><span class="faq-icon"><svg viewBox="0 0 12 12" fill="none"><line x1="6" y1="1" x2="6" y2="11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="1" y1="6" x2="11" y2="6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span></button>
+        <div class="faq-a"><div class="faq-a-inner">Yes — absolutely. I've been doing sports training and working with families in this community for 7 years. I'm happy to connect you with neighbors who can speak to their experience working with me. Just mention it when you reach out and I'll make it happen.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CONTACT ══ -->
+<section class="sec contact-sec" id="contact">
+  <div class="sec-inner">
+    <div class="reveal">
+      <div class="lbl">Get In Touch</div>
+    </div>
+    <div class="contact-grid">
+      <div class="reveal">
+        <h2 class="contact-h2">Ready when <em>you are.</em></h2>
+        <p class="contact-body">Fill out the form and I'll get back to you quickly. Summer books up fast — especially camp days. Don't wait too long.</p>
+        <div class="cdetails">
+          <div class="cdet"><div class="cdet-dot"></div><div class="cdet-lbl">Location</div><div class="cdet-val">BBCC Community</div></div>
+          <div class="cdet"><div class="cdet-dot"></div><div class="cdet-lbl">Phone</div><div class="cdet-val">[Your Phone Number]</div></div>
+          <div class="cdet"><div class="cdet-dot"></div><div class="cdet-lbl">Email</div><div class="cdet-val">[Your Email Address]</div></div>
+          <div class="cdet"><div class="cdet-dot"></div><div class="cdet-lbl">Available</div><div class="cdet-val">June – August 2026</div></div>
+          <div class="cdet"><div class="cdet-dot"></div><div class="cdet-lbl">Response</div><div class="cdet-val">Within 24 hours, usually same day</div></div>
+        </div>
+      </div>
+      <div class="reveal rd1">
+        <div class="cform2">
+          <div class="frow2">
+            <label>Your Name</label>
+            <input type="text" placeholder="First & last name">
+          </div>
+          <div class="frow2">
+            <label>Phone or Email</label>
+            <input type="text" placeholder="Best way to reach you">
+          </div>
+          <div class="frow2">
+            <label>I'm Interested In</label>
+            <select>
+              <option value="">Select a service...</option>
+              <option>Kids Summer Camp Days</option>
+              <option>Tech Help at Home</option>
+              <option>Fitness & Personal Training</option>
+              <option>Sports Training / Coaching</option>
+              <option>Multiple Services</option>
+            </select>
+          </div>
+          <div class="frow2">
+            <label>Tell Me More</label>
+            <textarea placeholder="Ages of kids, what you need help with, schedule preferences, questions..."></textarea>
+          </div>
+          <button class="fsubmit2">Send Message →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-name">[Your Name] <em>· BBCC Summer Services 2026</em></div>
+  <div class="footer-copy">Lower Merion · Your neighbor, your resource</div>
+</footer>
+
+<script>
+// ── CURSOR ──
+const cur=document.getElementById('cur'),curR=document.getElementById('curR');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px';});
+(function animR(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;curR.style.left=rx+'px';curR.style.top=ry+'px';requestAnimationFrame(animR);})();
+document.querySelectorAll('a,button').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{cur.style.width='20px';cur.style.height='20px';curR.style.width='52px';curR.style.height='52px';});
+  el.addEventListener('mouseleave',()=>{cur.style.width='12px';cur.style.height='12px';curR.style.width='36px';curR.style.height='36px';});
+});
+
+// ── FLOATING NAV — shrinks on scroll ──
+const hhInner=document.getElementById('hhInner');
+window.addEventListener('scroll',()=>{
+  if(window.scrollY>80) hhInner.classList.add('scrolled');
+  else hhInner.classList.remove('scrolled');
+},{passive:true});
+
+// ── MOBILE DRAWER ──
+const hhHam=document.getElementById('hhHamburger');
+const hhDrawer=document.getElementById('hhDrawer');
+hhHam.addEventListener('click',()=>{
+  hhDrawer.classList.toggle('open');
+  const s=hhHam.querySelectorAll('span');
+  if(hhDrawer.classList.contains('open')){
+    s[0].style.transform='rotate(45deg) translate(4px,4px)';
+    s[1].style.opacity='0';
+    s[2].style.transform='rotate(-45deg) translate(4px,-4px)';
+  } else {
+    s.forEach(x=>{x.style.transform='';x.style.opacity='';});
+  }
+});
+function closeDrawer(){
+  hhDrawer.classList.remove('open');
+  hhHam.querySelectorAll('span').forEach(x=>{x.style.transform='';x.style.opacity='';});
+}
+
+// ── SCROLL-EXPANSION HERO ──
+(function(){
+  const outer=document.getElementById('sxOuter');
+  const media=document.getElementById('sxMedia');
+  const bg=document.getElementById('sxBg');
+  const veil=document.getElementById('sxVeil');
+  const t1=document.getElementById('sxT1');
+  const t2=document.getElementById('sxT2');
+  const hint=document.getElementById('sxHint');
+  const end=document.getElementById('sxEnd');
+  const pbar=document.getElementById('sxPbar');
+  if(!outer||!media) return;
+
+  function update(){
+    const rect=outer.getBoundingClientRect();
+    const scrolled=-rect.top;
+    const total=outer.offsetHeight - window.innerHeight;
+    const p=Math.min(Math.max(scrolled/total,0),1);
+
+    const isMob=window.innerWidth<768;
+    const mw=300+p*(isMob?700:1400);
+    const mh=400+p*(isMob?260:440);
+    media.style.width=mw+'px';
+    media.style.height=mh+'px';
+    media.style.borderRadius=(16*(1-p))+'px';
+
+    bg.style.opacity=(1-p).toString();
+    veil.style.opacity=Math.max(0.35-p*0.35,0).toString();
+
+    const tx=p*(isMob?28:18);
+    t1.style.transform=`translateX(-${tx}vw)`;
+    t2.style.transform=`translateX(${tx}vw)`;
+    const titleOpacity=Math.max(1-p*2.2,0);
+    t1.style.opacity=titleOpacity;
+    t2.style.opacity=titleOpacity;
+    hint.style.opacity=Math.max(1-p*4,0).toString();
+    pbar.style.width=(p*100)+'%';
+
+    if(p>=0.98) end.classList.add('vis');
+    else end.classList.remove('vis');
+  }
+
+  window.addEventListener('scroll',update,{passive:true});
+  update();
+})();
+
+
+const obs=new IntersectionObserver(en=>{en.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis');});},{threshold:.1});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+// ── EXPANDING CARDS ──
+function toggleCard(id){
+  const card=document.getElementById('card-'+id);
+  const isOpen=card.classList.contains('open');
+  ['camp','tech','fit','sports'].forEach(c=>{
+    const el=document.getElementById('card-'+c);
+    if(el) el.classList.remove('open');
+  });
+  if(!isOpen){
+    card.classList.add('open');
+    setTimeout(()=>card.scrollIntoView({behavior:'smooth',block:'nearest'}),80);
+  }
+}
+function submitCard(e,id){
+  e.stopPropagation();
+  e.preventDefault();
+  const el=document.getElementById(id);
+  if(el){el.style.display='block';}
+  e.target.style.display='none';
+}
+
+// ── FAQ ──
+document.querySelectorAll('.faq-q').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const item=btn.closest('.faq-item');
+    const isOpen=item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i=>i.classList.remove('open'));
+    if(!isOpen)item.classList.add('open');
+  });
+});
+
+// ── FORM SUBMITS ──
+function submitCamp(e){
+  e.preventDefault();
+  document.getElementById('camp-success').style.display='block';
+  e.target.style.display='none';
+}
+function submitForm(e,id){
+  e.preventDefault();
+  document.getElementById(id).style.display='block';
+  e.target.style.display='none';
+}
+</script>
+</body>
+</html>
